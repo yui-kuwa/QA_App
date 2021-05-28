@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
@@ -135,44 +136,41 @@ class QuestionDetailActivity : AppCompatActivity() {
         mAnswerRef = dataBaseReference.child(ContentsPATH).child(mQuestion.genre.toString()).child(mQuestion.questionUid).child(AnswersPATH)
         mAnswerRef.addChildEventListener(mEventListener)
 
-        val favoriteRef = mDataBaseReference.child(FavoritesPATH).child(user!!.uid).child(mQuestion.questionUid)
-
         if(user != null){
+            val favoriteRef = mDataBaseReference.child(FavoritesPATH).child(user!!.uid).child(mQuestion.questionUid)
 
             favoriteRef.addValueEventListener(mEventListener2)
             //画像を変更
             changeFavoriteImageView(isFavorite)
+
+            //先にユーザがログインしてるかの情報を得てから、お気に入りボタンをクリックできるようにするかできないようにするか（できないようにするには）
+            favoriteImageView.setOnClickListener {
+                //データを保存する場所を指定
+
+                data["genre"] = mQuestion.genre.toString()
+
+                    if (isFavorite == false) {//登録
+                        isFavorite = true
+                        //画像の設定
+                        favoriteImageView.setImageResource(R.drawable.ic_star)
+
+                        //pushでユニークなIDを振る、setValueでコンソールに登録
+                        favoriteRef.setValue(data)
+
+                    } else {//解除
+                        isFavorite = false
+                        //画像の設定
+                        favoriteImageView.setImageResource(R.drawable.ic_star_border)
+
+                        favoriteRef.removeValue()
+                    }
+            }
         }else{
             favoriteImageView.visibility = View.INVISIBLE//imageViewを表示しない
+            favoriteImageView.isClickable = false
+            favoriteImageView.isVisible = false
         }
 
-        //先にユーザがログインしてるかの情報を得てから、お気に入りボタンをクリックできるようにするかできないようにするか（できないようにするには）
-        favoriteImageView.setOnClickListener {
-            //データを保存する場所を指定
-
-            data["genre"] = mQuestion.genre.toString()
-
-            if(user != null){ //ログインしている
-
-                if (isFavorite == false) {//登録
-                    isFavorite = true
-                    //画像の設定
-                    favoriteImageView.setImageResource(R.drawable.ic_star)
-
-                    //pushでユニークなIDを振る、setValueでコンソールに登録
-                    favoriteRef.setValue(data)
-
-                } else {//解除
-                    isFavorite = false
-                    //画像の設定
-                    favoriteImageView.setImageResource(R.drawable.ic_star_border)
-
-                    favoriteRef.removeValue()
-                }
-            }else{//ログインしてない場合はクリックを無効にする
-                favoriteImageView.isClickable = false
-            }
-        }
     }
 
     override fun onResume() {

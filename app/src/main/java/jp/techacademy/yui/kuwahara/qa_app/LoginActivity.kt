@@ -83,9 +83,9 @@ class LoginActivity : AppCompatActivity() {
                     // 表示名をPreferenceに保存する
                     saveName(name)
                 } else {//すぐにログインする場合の処理
-                    userRef.addListenerForSingleValueEvent(object : ValueEventListener {////////////////
-                        override fun onDataChange(snapshot: DataSnapshot) {//////////////////
-                            val data = snapshot.value as Map<*, *>?/////////////
+                    userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val data = snapshot.value as Map<*, *>?
                             saveName(data!!["name"] as String)
                         }
 

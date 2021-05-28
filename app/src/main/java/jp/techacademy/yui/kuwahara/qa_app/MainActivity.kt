@@ -226,7 +226,7 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
 
         // ログイン済みのユーザーを取得する
         val user2 = FirebaseAuth.getInstance().currentUser///////追加
-        
+
         val id = item.itemId
 
         if (id == R.id.nav_hobby) {

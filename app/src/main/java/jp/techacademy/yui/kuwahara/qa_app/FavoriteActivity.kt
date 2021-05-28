@@ -106,8 +106,6 @@ class FavoriteActivity : AppCompatActivity() /*, NavigationView.OnNavigationItem
         }
     }
 
-    val favoriteRef = mDataBaseReference!!.child(FavoritesPATH).child(user!!.uid)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite)
@@ -145,6 +143,8 @@ class FavoriteActivity : AppCompatActivity() /*, NavigationView.OnNavigationItem
 
     override fun onResume() {
         super.onResume()
+
+        val favoriteRef = mDataBaseReference!!.child(FavoritesPATH).child(user!!.uid)
 
         // 質問のリストをクリアしてから再度Adapterにセットし、AdapterをListViewにセットし直す
         mFavoriteQuestionArrayList.clear()
