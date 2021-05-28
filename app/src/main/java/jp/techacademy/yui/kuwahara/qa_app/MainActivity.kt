@@ -135,6 +135,8 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
             } else {
 
             }
+            // ログイン済みのユーザーを取得する
+            val user = FirebaseAuth.getInstance().currentUser
 
             // ログインしていなければログイン画面に遷移させる
             if (user == null) {
@@ -184,6 +186,9 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         super.onResume()
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
 
+        // ログイン済みのユーザーを取得する
+        val user = FirebaseAuth.getInstance().currentUser///////追加
+
         // 1:趣味を既定の選択とする
         if(mGenre == 0) {
             onNavigationItemSelected(navigationView.menu.getItem(0))
@@ -218,6 +223,10 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
 
     //ドロワーメニュー選択
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        // ログイン済みのユーザーを取得する
+        val user2 = FirebaseAuth.getInstance().currentUser///////追加
+        
         val id = item.itemId
 
         if (id == R.id.nav_hobby) {
@@ -235,12 +244,11 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         }
 
         //ログインしている場合、お気に入りもドロワーメニューで選択可能
-        if (user != null) {
+        if (user2 != null) {
             if (id == R.id.nav_favorite) {//追加した　ドロワーメニューにお気に入り
 
                 val intent = Intent(this@MainActivity, FavoriteActivity::class.java)
                 startActivity(intent)
-
             }
         }
 
